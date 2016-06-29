@@ -62,7 +62,7 @@
   </style>
 
     <div hidden$=[[loggedIn]] class='warning layout center'>
-      <hero1 white>Please <a href='/signup'>log in or sign up</a> to start looking for roommates.</hero1>
+      <hero1 white=''>Please <a href='/signup'>log in or sign up</a> to start looking for roommates.</hero1>
     </div>
 
     <div hidden$=[[!loggedIn]]>
@@ -80,7 +80,7 @@
 
               <div class='container'>
                 <paper-card elevation='1' id='hero' hidden$=[[!isFirst(index)]]>
-                  <h1 text-center white>Start a new conversation</h1>
+                  <h1 text-center='' white=''>Start a new conversation</h1>
                   <fsn-messaging-input></fsn-messaging-input>
                 </paper-card>
 
@@ -88,7 +88,7 @@
 
                   <template id='messages' is='dom-repeat' items=[[limitMessages(item.messages.*)]]>
                     <paper-item>
-                      <img src='http://graph.facebook.com/[[getImage(item.fromUserId)]]/picture?type=square' />
+                      <img src='http://graph.facebook.com/[[getImage(item.fromUserId)]]/picture?type=square'>
                       <copy6><strong>[[getName(item.fromUserId)]]</strong> [[item.content]]</copy6>
                     </paper-item>
                   </template>
@@ -96,7 +96,7 @@
                   <section hidden$=[[hasManyMessages(item.messages)]]>
                     <paper-button on-tap='loadFullConversation'>Load entire conversation</paper-button>
                   </section>
-                  <fsn-messaging-input small chat-id=[[item._id]]></fsn-messaging-input>
+                  <fsn-messaging-input small='' chat-id=[[item._id]]></fsn-messaging-input>
                 </paper-card>
               </div>
             </template>
@@ -109,95 +109,91 @@
   </template>
 </dom-module>
 
-
-
 <script>
-  require('@polymer/polymer/polymer.html');
+require('@polymer/polymer/polymer.html');
 
-  require('@polymer/iron-list/iron-list.html');
-  require('@polymer/iron-scroll-threshold/iron-scroll-threshold.html');
+require('@polymer/iron-list/iron-list.html');
+require('@polymer/iron-scroll-threshold/iron-scroll-threshold.html');
 
-  require('@polymer/paper-button/paper-button.html');
-  require('@polymer/paper-card/paper-card.html');
-  require('@polymer/paper-item/paper-item.html');
+require('@polymer/paper-button/paper-button.html');
+require('@polymer/paper-card/paper-card.html');
+require('@polymer/paper-item/paper-item.html');
 
+require('@andreasgalster/fsn-messaging-input/dist/fsn-messaging-input.html');
+require('@andreasgalster/fsn-boilerplate/dist/fsn-boilerplate.html');
+require('@andreasgalster/fsn-icons/dist/fsn-icons.html');
 
-  require('@andreasgalster/fsn-messaging-input/dist/fsn-messaging-input.html');
-  require('@andreasgalster/fsn-boilerplate/dist/fsn-boilerplate.html');
-  require('@andreasgalster/fsn-icons/dist/fsn-icons.html');
-
-
-  Polymer({
-    is: 'fsn-public-messaging',
-    behaviors:[mwcMixin],
-    properties: {
-      user: {
-        type: Object
-      },
-      publicMessages: {
-        type: Array,
-        observer: 'clearScroll'
-      },
-      loggedIn: {
-        type: Boolean
-      },
-      limiter: {
-        type: Number,
-        value: 8,
-        observer: 'subscribeData'
-      }
+Polymer({
+  is: 'fsn-public-messaging',
+  behaviors: [mwcMixin],
+  properties: {
+    user: {
+      type: Object
     },
-
-    // Subscribe to data. Once data is ready, set dynamic meta tags
-    subscribeData: function() {
-      this.subscribe('usersTeaserAll');
-      this.subscribe('PublicMessages', this.limiter);
+    publicMessages: {
+      type: Array,
+      observer: 'clearScroll'
     },
-    clearScroll: function() {
-      if(this.$$('iron-scroll-threshold')) {
-        this.$$('iron-scroll-threshold').clearTriggers();
-      }
+    loggedIn: {
+      type: Boolean
     },
-    hasManyMessages: function(messages) {
-      return messages.length < 4;
-    },
-    loadFullConversation: function(e) {
-      e.model.set('item.messages.limit', 1000);
-
-      // Tell list to resize to fit the expanded card
-      this.$$('iron-list').notifyResize();
-    },
-    limitMessages: function(change) {
-      const limit = (change.path === 'item.messages.limit') ? change.value : 3;
-      return change.base.slice(0, limit);
-    },
-    isFirst: function(index) {
-      return index == 0;
-    },
-    loadMoreData: function() {
-      console.log('scroll end');
-      this.limiter += 8;
-    },
-    tracker: function() {
-      this.publicMessages = PublicMessages.find({},{sort: {dateCreated: -1}}).fetch();
-
-      var user = Meteor.user();
-      this.user = user;
-      this.loggedIn = (user != null);
-      this.users = Meteor.users.find().fetch();
-    },
-    sendMessage: function(e) {
-      this.otherUserId = e.model.item._id;
-    },
-    getImage: function(fromUserId) {
-      var user = Meteor.users.findOne({ _id: fromUserId });
-      return user.services.facebook.id;
-    },
-    getName: function(fromUserId) {
-      var user = Meteor.users.findOne({ _id: fromUserId });
-      return user.services.facebook.first_name;
+    limiter: {
+      type: Number,
+      value: 8,
+      observer: 'subscribeData'
     }
+  },
 
-  });
+  // Subscribe to data. Once data is ready, set dynamic meta tags
+  subscribeData: function subscribeData() {
+    this.subscribe('usersTeaserAll');
+    this.subscribe('PublicMessages', this.limiter);
+  },
+  clearScroll: function clearScroll() {
+    if (this.$$('iron-scroll-threshold')) {
+      this.$$('iron-scroll-threshold').clearTriggers();
+    }
+  },
+  hasManyMessages: function hasManyMessages(messages) {
+    return messages.length < 4;
+  },
+  loadFullConversation: function loadFullConversation(e) {
+    e.model.set('item.messages.limit', 1000);
+
+    // Tell list to resize to fit the expanded card
+    this.$$('iron-list').notifyResize();
+  },
+  limitMessages: function limitMessages(change) {
+    var limit = change.path === 'item.messages.limit' ? change.value : 3;
+    return change.base.slice(0, limit);
+  },
+  isFirst: function isFirst(index) {
+    return index == 0;
+  },
+  loadMoreData: function loadMoreData() {
+    console.log('scroll end');
+    this.limiter += 8;
+  },
+  tracker: function tracker() {
+    this.publicMessages = PublicMessages.find({}, { sort: { dateCreated: -1 } }).fetch();
+
+    var user = Meteor.user();
+    this.user = user;
+    this.loggedIn = user != null;
+    this.users = Meteor.users.find().fetch();
+  },
+  sendMessage: function sendMessage(e) {
+    this.otherUserId = e.model.item._id;
+  },
+  getImage: function getImage(fromUserId) {
+    var user = Meteor.users.findOne({ _id: fromUserId });
+    return user.services.facebook.id;
+  },
+  getName: function getName(fromUserId) {
+    var user = Meteor.users.findOne({ _id: fromUserId });
+    return user.services.facebook.first_name;
+  }
+
+});
 
 </script>
