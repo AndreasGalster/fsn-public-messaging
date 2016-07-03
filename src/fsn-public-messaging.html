@@ -88,11 +88,11 @@
 
                   <template id='messages' is='dom-repeat' items=[[limitMessages(item.messages.*)]]>
                     <paper-item>
-                      <img src='http://graph.facebook.com/[[getImage(item.fromUserId)]]/picture?type=square'>
+                      <img src='https://graph.facebook.com/[[getImage(item.fromUserId)]]/picture?type=square'>
                       <copy6><strong>[[getName(item.fromUserId)]]</strong> [[item.content]]</copy6>
                     </paper-item>
                   </template>
-                  
+
                   <section hidden$=[[hasManyMessages(item.messages)]]>
                     <paper-button on-tap='loadFullConversation'>Load entire conversation</paper-button>
                   </section>
