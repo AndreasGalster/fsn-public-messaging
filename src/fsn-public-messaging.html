@@ -62,7 +62,7 @@
   </style>
 
     <div hidden$=[[loggedIn]] class='warning layout center'>
-      <hero1 white=''>Please <a href='/signup'>log in or sign up</a> to start looking for roommates.</hero1>
+      <hero1 white>Please <a href='/signup'>log in or sign up</a> to start looking for roommates.</hero1>
     </div>
 
     <div hidden$=[[!loggedIn]]>
@@ -80,8 +80,8 @@
 
               <div class='container'>
                 <paper-card elevation='1' id='hero' hidden$=[[!isFirst(index)]]>
-                  <h1 text-center='' white=''>Start a new conversation</h1>
-                  <fsn-messaging-input></fsn-messaging-input>
+                  <h1 text-center white>Start a new conversation</h1>
+                  <fsn-messaging-input public min-length='10'></fsn-messaging-input>
                 </paper-card>
 
                 <paper-card elevation='2'>
@@ -92,11 +92,12 @@
                       <copy6><strong>[[getName(item.fromUserId)]]</strong> [[item.content]]</copy6>
                     </paper-item>
                   </template>
-
+                  <!--
                   <section hidden$=[[hasManyMessages(item.messages)]]>
                     <paper-button on-tap='loadFullConversation'>Load entire conversation</paper-button>
                   </section>
-                  <fsn-messaging-input small='' chat-id=[[item._id]]></fsn-messaging-input>
+                   -->
+                  <fsn-messaging-input public small chat-id=[[item._id]]></fsn-messaging-input>
                 </paper-card>
               </div>
             </template>
