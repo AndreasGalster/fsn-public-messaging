@@ -74,6 +74,14 @@
     <template is='dom-if' if=[[user.profile.active]]>
       <section>
 
+
+        <template is='dom-if' if=[[availableMessages(publicMessages)]]>
+          <paper-card elevation='1' id='hero' hidden$=[[!isFirst(index)]]>
+            <h1 text-center white>Start a new conversation</h1>
+            <fsn-messaging-input public min-length='10'></fsn-messaging-input>
+          </paper-card>
+        </template>
+
         <iron-scroll-threshold on-lower-threshold='loadMoreData'>
           <iron-list items=[[publicMessages]]>
             <template>
@@ -148,37 +156,46 @@ Polymer({
     }
   },
 
+  availableMessages: function(messages) {
+
+    return message.length === 0;
+    // if(message.length === 0) {
+    //   return false
+    // } else {
+    //
+    // }
+  },
   // Subscribe to data. Once data is ready, set dynamic meta tags
-  subscribeData: function subscribeData() {
+  subscribeData: function() {
     this.subscribe('usersTeaserAll');
     this.subscribe('PublicMessages', this.limiter);
   },
-  clearScroll: function clearScroll() {
+  clearScroll: function() {
     if (this.$$('iron-scroll-threshold')) {
       this.$$('iron-scroll-threshold').clearTriggers();
     }
   },
-  hasManyMessages: function hasManyMessages(messages) {
+  hasManyMessages: function(messages) {
     return messages.length < 4;
   },
-  loadFullConversation: function loadFullConversation(e) {
+  loadFullConversation: function(e) {
     e.model.set('item.messages.limit', 1000);
 
     // Tell list to resize to fit the expanded card
     this.$$('iron-list').notifyResize();
   },
-  limitMessages: function limitMessages(change) {
+  limitMessages: function(change) {
     var limit = change.path === 'item.messages.limit' ? change.value : 3;
     return change.base.slice(0, limit);
   },
   isFirst: function isFirst(index) {
     return index == 0;
   },
-  loadMoreData: function loadMoreData() {
+  loadMoreData: function() {
     console.log('scroll end');
     this.limiter += 8;
   },
-  tracker: function tracker() {
+  tracker: function() {
     this.publicMessages = PublicMessages.find({}, { sort: { dateCreated: -1 } }).fetch();
 
     var user = Meteor.user();
@@ -186,14 +203,14 @@ Polymer({
     this.loggedIn = user != null;
     this.users = Meteor.users.find().fetch();
   },
-  sendMessage: function sendMessage(e) {
+  sendMessage: function(e) {
     this.otherUserId = e.model.item._id;
   },
-  getImage: function getImage(fromUserId) {
+  getImage: function(fromUserId) {
     var user = Meteor.users.findOne({ _id: fromUserId });
     return user.services.facebook.id;
   },
-  getName: function getName(fromUserId) {
+  getName: function(fromUserId) {
     var user = Meteor.users.findOne({ _id: fromUserId });
     return user.services.facebook.first_name;
   }
