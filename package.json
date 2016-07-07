@@ -1,6 +1,6 @@
 {
   "name": "@andreasgalster/fsn-public-messaging",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "fsn-public-messaging is a set of basic shared styles, similar to bootstrap",
   "main": "fsn-public-messaging.html",
   "scripts": {
