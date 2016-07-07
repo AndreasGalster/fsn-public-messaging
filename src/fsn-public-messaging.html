@@ -76,10 +76,12 @@
 
 
         <template is='dom-if' if=[[availableMessages(publicMessages)]]>
-          <paper-card elevation='1' id='hero' hidden$=[[!isFirst(index)]]>
-            <h1 text-center white>Start a new conversation</h1>
-            <fsn-messaging-input public min-length='10'></fsn-messaging-input>
-          </paper-card>
+          <div class='container'>
+            <paper-card elevation='1' id='hero' hidden$=[[!isFirst(index)]]>
+              <h1 text-center white>Start a new conversation</h1>
+              <fsn-messaging-input public min-length='10'></fsn-messaging-input>
+            </paper-card>
+          </div>
         </template>
 
         <iron-scroll-threshold on-lower-threshold='loadMoreData'>
