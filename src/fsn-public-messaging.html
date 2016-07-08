@@ -74,7 +74,7 @@
     <template is='dom-if' if=[[user.profile.active]]>
       <section>
 
-
+<!--
         <template is='dom-if' if=[[availableMessages(publicMessages)]]>
           <div class='container'>
             <paper-card elevation='1' id='hero' hidden$=[[!isFirst(index)]]>
@@ -83,7 +83,7 @@
             </paper-card>
           </div>
         </template>
-
+ -->
         <iron-scroll-threshold on-lower-threshold='loadMoreData'>
           <iron-list items=[[publicMessages]]>
             <template>
@@ -158,9 +158,9 @@ Polymer({
     }
   },
 
-  availableMessages: function(messages) {
-    return messages.length === 0;
-  },
+  // availableMessages: function(messages) {
+  //   return messages.length === 0;
+  // },
   // Subscribe to data. Once data is ready, set dynamic meta tags
   subscribeData: function() {
     this.subscribe('usersTeaserAll');
